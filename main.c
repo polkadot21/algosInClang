@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <assert.h>
+#include <string.h>
 
 
 int strLen(char strArr[]) {
@@ -186,24 +188,179 @@ int isSubstring(const char subArr[], const char bigArr[]) {
     int lenBigArr = strLen(bigArr);
     int lenSubArr = strLen(subArr);
 
-    for (int i=0;i<lenBigArr;i++) {
-        int counter = 0;
-        for (int j=0;j<lenSubArr;j++) {
-            if (subArr[j] == bigArr[i]) {
-                i++;
-                counter ++;
+    if (lenSubArr == 0) {
+        return 1; // An empty substring is always considered a substring
+    }
+
+    for (int i = 0; i <= lenBigArr - lenSubArr; i++) {
+        int j;
+        for (j = 0; j < lenSubArr; j++) {
+            if (bigArr[i + j] != subArr[j]) {
+                break;
             }
         }
-        if (counter == lenSubArr) {
+        if (j == lenSubArr) {
             return 1;
         }
     }
+
     return 0;
 }
 
+// Test functions
+void test_strLen() {
+    assert(strLen("hello") == 5);
+    assert(strLen("") == 0);
+    assert(strLen("a") == 1);
+}
+
+void test_isPalindrome() {
+    assert(isPalindrome("madam") == 1);
+    assert(isPalindrome("hello") == 0);
+    assert(isPalindrome("a") == 1);
+    assert(isPalindrome("") == 1);
+}
+
+void test_reverse() {
+    char* res1 = reverse("hello");
+    assert(strcmp(res1, "olleh") == 0);
+    free(res1);
+
+    char* res2 = reverse("");
+    assert(strcmp(res2, "") == 0);
+    free(res2);
+
+    char* res3 = reverse("a");
+    assert(strcmp(res3, "a") == 0);
+    free(res3);
+}
+
+void test_appendr_char() {
+    char* res1 = appendr_char("hello", '!');
+    assert(strcmp(res1, "hello!") == 0);
+    free(res1);
+
+    char* res2 = appendr_char("", 'a');
+    assert(strcmp(res2, "a") == 0);
+    free(res2);
+}
+
+void test_appendl_char() {
+    char* res1 = appendl_char("hello", '!');
+    assert(strcmp(res1, "!hello") == 0);
+    free(res1);
+
+    char* res2 = appendl_char("", 'a');
+    assert(strcmp(res2, "a") == 0);
+    free(res2);
+}
+
+void test_delSymbol() {
+    char* res1 = delSymbol("hello", 0);
+    assert(strcmp(res1, "ello") == 0);
+    free(res1);
+
+    char* res2 = delSymbol("hello", 2);
+    assert(strcmp(res2, "helo") == 0);
+    free(res2);
+
+    char* res3 = delSymbol("hello", 4);
+    assert(strcmp(res3, "hell") == 0);
+    free(res3);
+}
+
+void test_isBeginning() {
+    assert(isBeginning("hell", "hello") == 1);
+    assert(isBeginning("hello", "hello") == 1);
+    assert(isBeginning("ello", "hello") == 0);
+}
+
+void test_isLowerCaseASCII() {
+    assert(isLowerCaseASCII('a') == true);
+    assert(isLowerCaseASCII('z') == true);
+    assert(isLowerCaseASCII('A') == false);
+    assert(isLowerCaseASCII('1') == false);
+}
+
+void test_isUpperCaseASCII() {
+    assert(isUpperCaseASCII('A') == true);
+    assert(isUpperCaseASCII('Z') == true);
+    assert(isUpperCaseASCII('a') == false);
+    assert(isUpperCaseASCII('1') == false);
+}
+
+void test_isLowercase() {
+    assert(isLowercase("hello") == 1);
+    assert(isLowercase("HELLO") == 0);
+    assert(isLowercase("Hello") == 0);
+    assert(isLowercase("") == 1);
+}
+
+
+void test_upcase() {
+    char* res1 = upcase("hello");
+    assert(strcmp(res1, "HELLO") == 0);
+    free(res1);
+
+    char* res2 = upcase("HELLO");
+    assert(strcmp(res2, "HELLO") == 0);
+    free(res2);
+
+    char* res3 = upcase("HeLLo");
+    assert(strcmp(res3, "HELLO") == 0);
+    free(res3);
+}
+
+void test_swapCase() {
+    char* res1 = swapCase("hello");
+    assert(strcmp(res1, "HELLO") == 0);
+    free(res1);
+
+    char* res2 = swapCase("HELLO");
+    assert(strcmp(res2, "hello") == 0);
+    free(res2);
+
+    char* res3 = swapCase("HeLLo");
+    assert(strcmp(res3, "hEllO") == 0);
+    free(res3);
+}
+
+void test_dupString() {
+    char* res1 = dupString("ab", 3);
+    assert(strcmp(res1, "ababab") == 0);
+    free(res1);
+
+    char* res2 = dupString("", 3);
+    assert(strcmp(res2, "") == 0);
+    free(res2);
+}
+
+void test_isSubstring() {
+    assert(isSubstring("lo", "hello") == 1);
+    assert(isSubstring("hell", "hello") == 1);
+    assert(isSubstring("hello", "hello") == 1);
+    assert(isSubstring("world", "hello") == 0);
+    assert(isSubstring("", "hello") == 1);
+    assert(isSubstring("hello", "") == 0);
+}
+
 int main() {
-    char arr[] = "abcd";
-    int res = isSubstring("ad", arr);
-    printf("Res: %d", res);
+    // Run all test cases
+    test_strLen();
+    test_isPalindrome();
+    test_reverse();
+    test_appendr_char();
+    test_appendl_char();
+    test_delSymbol();
+    test_isBeginning();
+    test_isLowerCaseASCII();
+    test_isUpperCaseASCII();
+    test_isLowercase();
+    test_upcase();
+    test_swapCase();
+    test_dupString();
+    test_isSubstring();
+
+    printf("All tests passed!\n");
     return 0;
 }
