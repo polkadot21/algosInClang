@@ -232,6 +232,28 @@ char* del_symbol(char arr[], int idx) {
 }
 
 
+// число четное, если предыдущее нечетное
+// число нечетное, если предыдущее четное
+// ДЗ код (деление на 2 использовать запрещается)
+
+
+bool isEven(int val) {
+    if (val == 0) {
+        return true;
+    }
+
+    return (!isEven(val-1));
+}
+
+bool isOdd(int val) {
+    if (val == 0) {
+        return false;
+    }
+
+    return (!isOdd(val-1));
+}
+
+
 // Test functions
 void test_strLen() {
     assert(strLen("hello") == 5);
@@ -374,6 +396,19 @@ void test_is_identifier(){
     assert(is_identifier("1222") == 0);
 }
 
+void test_isOdd(){
+    assert(isOdd(200) == false);
+    assert(isOdd(1) == true);
+    assert(isOdd(0) == false);
+}
+
+void test_isEven(){
+    assert(isEven(201) == false);
+    assert(isEven(200) == true);
+    assert(isEven(0) == true);
+}
+
+
 int main() {
     // Run all test cases
     test_strLen();
@@ -391,7 +426,8 @@ int main() {
     test_dupString();
     test_isSubstring();
     test_is_identifier();
+    test_isOdd();
+    test_isEven();
 
-    printf("All tests passed!\n");
     return 0;
 }
